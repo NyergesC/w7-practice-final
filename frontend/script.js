@@ -1,76 +1,37 @@
-function Country(name, short, population, flag, continent) {
-    this.name = name;
-    this.short = short;
-    this.population = population;
-    this.flag = flag;
-    this.continent = continent;
-}
+// OBJECT CONSTRUCTIONS
 
-// COMPONENTS
+// contructor-ok nagy betável kezdődnek
+// tudunk spórolni azzal, hogy ugyanaz a séma, és az objektumok csak akkor jönnek létre ha szükségünk van rá.
 
-const menuButton = _ => {
-    return `
-    <button id="menuBtn">
-        <svg width="40" height="40">
-            <rect width="20" height="2"/>
-            <rect width="20" height="2"/>
-            <rect width="20" height="2"/>
-        </svg> 
-    </button>
-    `;
-}
-
-const header = (logo, button) => {
-    return `
-    <header>
-        <a id="logo">${logo}</a>
-        ${button()}
-    </header>
-    `;
-}
-
-const countryCard = (name, short, population, flag, continent) => {
-    return `
-    <div class="card">
-        <h1>${name}</h1>
-        <p>[${short}]</p>
-        <p>Continent: <b>${continent}</b></p>
-        <p>Population: <b>${population}</b></p>
-        <img src="${flag}" alt="flag.svg">
-    </div>
-    `;
-}
+// === 1. Date ===
+/* 
+const currentDate = new Date("1993/10/05");
+//a currentDate objektum lesz
+console.log(currentDate)
+ */
 
 
-const loadEvent = async _ => {
+//Saját constructor "Book"
 
-    // GET DATA
-    // elmentjük a változóban a "fetch"-ben lévő adatot (await -> asyncron funkció,ezért kikell írni, hogy "async")
-    const countryRes = await fetch("https://restcountries.com/v3.1/all");
-    // megvárjuk h lefusson a fetch, majd formázzuk
-    const countryArr = await countryRes.json();
-
-    // PROCESS DATA
-    let countries = countryArr.map(function(country){
-        return new Country(country.name.common, country.cca3, country.population, country.flags.svg, country.continents[0])
-    });
-    console.log(countries)
-    
-    // létrehozom a "cards" variable-t
-    let cards = "";
-    // "forof"-al végigmegy a countries array-en, és minden iterációnál lefuttatja a countryCard funkció-t
-    for (const country of countries) {
-        cards += countryCard(country.name, country.short, country.population, country.flag, country.continent)
+function Book(title, author, year, genre){
+    //"this" szinte minden esetben objektumra mutat vissza! (kivéve 1 eset) -> visszautalunk, hogy a létrejövő objektum milyen kulcsokat kapjon
+    this.title = title;
+    this.author = author;
+    this.year = year;
+    this.genre = genre;
+    this.age = function(){
+        // d változó tartalmazza a mai dátumot
+        const d = new Date()
+        // currentyear változó tartalmazza a mai dátumból csak az idei évet
+        const currentyear = d.getFullYear()
+        // returnoljuk a jelen dátumból a this.year évszámát
+        return currentyear - this.year
     }
-    
-    const rootElement = document.getElementById("root")
-    rootElement.insertAdjacentHTML("beforeend", header("Countries", menuButton));
-    rootElement.insertAdjacentHTML("beforeend", cards);
-
-    const getMenuButton = document.getElementById("menuBtn")
-    menuBtn.addEventListener("click", (event) => {
-        event.target.classList.toggle("clicked")
-    })
 }
 
-window.addEventListener("load", loadEvent);
+//"myFavouriteBook" változóban létrehozunk egy új object-et, a new (létrehoz) Book"constructor" (argument-ek)-el.
+const myFavouriteBook = new Book("Háború és Béke", "Tolsztoj", 1867, "historical novel")
+
+const mySecondFavouriteBook = new Book("Algebra Alapjai", "Joe Algebra", 1992, "sci-fi")
+
+console.log(mySecondFavouriteBook); 
